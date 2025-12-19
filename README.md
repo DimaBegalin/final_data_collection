@@ -19,23 +19,20 @@ This project implements a complete ETL/ELT workflow:
 * **Infrastructure:** Docker & Docker Compose
 
 ## 📂 Project Structure
-final/
-├── airflow/
-│   └── dags/                    # Airflow Orchestration
-│       ├── job1_ingestion_dag.py     # Trigger for job1
-│       ├── job2_clean_store_dag.py      # Trigger for job2
-│       └── job3_daily_summary_dag.py     # Trigger for job3
-├── src/                         # Core Logic (The "Jobs")
-│   ├── job1_producer.py                  # Producer
-│   ├── job2_cleaner.py                   # Cleaner
-│   └── job3_analytics.py                 # Analytics
-│   └── db_utils.py                  # Database connection helper
-├── data/                        # Persistent SQLite Storage
-│   └── app.db                   # SQLite database file
-├── .env                         # API Token (AQI_TOKEN=...)
-├── cities.txt                   # Configurable city list
-├── docker-compose.yaml          # Infrastructure as Code
-└── README.md                    # Project Documentation
+
+The project is organized to separate orchestration logic from core data processing:
+
+* **`airflow/dags/`**: Contains the DAG definitions. These files define the workflow schedule and task dependencies but do not contain business logic.
+* **`src/`**: The engine of the pipeline.
+    * `job1_producer.py`: Fetches raw data from WAQI API and pushes to Kafka.
+    * `job2_cleaner.py`: Consumes Kafka messages, cleans data, and populates the **events** table.
+    * `job3_analytics.py`: Performs SQL aggregations to update the **daily_summary** table.
+    * `db_utils.py`: Shared utility for database connectivity across all jobs.
+* **`data/`**: A mounted volume where the SQLite `app.db` resides, ensuring data persists even if containers are restarted.
+* **Root Files**:
+    * `.env`: Secure storage for the `AQI_TOKEN`.
+    * `cities.txt`: A simple text file to manage the scope of monitored cities.
+    * `requirements.txt`: Requirements file.
 
 ## ⚙️ Configuration & Extensibility
 The pipeline is designed for high flexibility:
