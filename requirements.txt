@@ -1,0 +1,5 @@
+apache-airflow        # Основной пакет Airflow
+confluent-kafka  # Для работы с Kafka
+requests         # Для запросов к API
+pandas           # Для очистки данных и аналитики
+python-dotenv     # Для управления переменными окружения
