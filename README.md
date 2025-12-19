@@ -19,11 +19,23 @@ This project implements a complete ETL/ELT workflow:
 * **Infrastructure:** Docker & Docker Compose
 
 ## 📂 Project Structure
-* `src/`: Core logic for Production, Cleaning, and Analytics.
-* `dags/`: Airflow DAG definitions.
-* `cities.txt`: List of target cities (configurable).
-* `.env`: Private API credentials.
-* `db_utils.py`: Database schema initialization and connection helpers.
+final/
+├── airflow/
+│   └── dags/                    # Airflow Orchestration
+│       ├── job1_ingestion_dag.py     # Trigger for job1
+│       ├── job2_clean_store_dag.py      # Trigger for job2
+│       └── job3_daily_summary_dag.py     # Trigger for job3
+├── src/                         # Core Logic (The "Jobs")
+│   ├── job1_producer.py                  # Producer
+│   ├── job2_cleaner.py                   # Cleaner
+│   └── job3_analytics.py                 # Analytics
+│   └── db_utils.py                  # Database connection helper
+├── data/                        # Persistent SQLite Storage
+│   └── app.db                   # SQLite database file
+├── .env                         # API Token (AQI_TOKEN=...)
+├── cities.txt                   # Configurable city list
+├── docker-compose.yaml          # Infrastructure as Code
+└── README.md                    # Project Documentation
 
 ## ⚙️ Configuration & Extensibility
 The pipeline is designed for high flexibility:
